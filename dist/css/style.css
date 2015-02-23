@@ -356,3 +356,94 @@ td,
 th {
   padding: 0;
 }
+.clearfix:before,
+.clearfix:after,
+.row:before,
+.row:after {
+  content: "";
+  display: table;
+}
+.clearfix:after,
+.row:after {
+  clear: both;
+}
+[class^='col-'] {
+  float: left;
+  min-height: 1px;
+}
+.col-1 {
+  width: 8.33333333%;
+}
+.col-2 {
+  width: 16.66666667%;
+}
+.col-3 {
+  width: 25%;
+}
+.col-4 {
+  width: 33.33333333%;
+}
+.col-5 {
+  width: 41.66666667%;
+}
+.col-6 {
+  width: 50%;
+}
+.col-7 {
+  width: 58.33333333%;
+}
+.col-8 {
+  width: 66.66666667%;
+}
+.col-9 {
+  width: 75%;
+}
+.col-10 {
+  width: 83.33333333%;
+}
+.col-11 {
+  width: 91.66666667%;
+}
+.col-12 {
+  width: 100%;
+}
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+html {
+  font-size: 62.5%;
+}
+body {
+  font: 1.4rem/1.4 Helvetica, Arial, sans-serif;
+}
+fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+label {
+  cursor: pointer;
+}
+input {
+  vertical-align: middle;
+}
+#base {
+  max-width: 75%;
+  margin: 0 auto;
+}
+.languages {
+  float: right;
+}
+.field input,
+.field select {
+  line-height: 20px;
+}
+.field + .field {
+  margin-top: 5px;
+}
+.field-label {
+  font-weight: bold;
+  margin-top: 5px;
+}

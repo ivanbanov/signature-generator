@@ -1,8 +1,9 @@
 (function(win) {
     'use strict';
 
-    function SignatureGenerator() {
+    function x() {
+        console.log(true);
     }
 
-    win.sg = SignatureGenerator;
+    win.x = x;
 }(window));

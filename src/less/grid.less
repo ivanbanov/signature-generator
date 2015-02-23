@@ -1,0 +1,19 @@
+// minimal system grid
+.row {
+    &:extend(.clearfix all);
+}
+[class^='col-'] {
+    float: left;
+    min-height: 1px;
+}
+
+// generate all column classes
+._columns(@n, @i: 1) when (@i =< @n) {
+  .col-@{i} {
+    width: (@i * 100% / @n);
+  }
+
+  ._columns(@n, (@i + 1));
+}
+
+._columns(@gridColumns);

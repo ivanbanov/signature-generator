@@ -1,15 +1,69 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<title>E-mail Signature Generator</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="dist/css/style.min.css" />
 </head>
 <body>
+    <div id="base">
+        <header>
+            <select name="language" class="languages">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <option value="pt">Portuguese</option>
+            </select>
 
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="dist/js/signature-generator.min.js"></script>
-    <script>
-        sg();
-    </script>
+            <h1>E-mail Signature Generator</h1>
+        </header>
+
+        <main class="row">
+            <section class="fields col-6">
+                <form>
+                    <fieldset>
+                        <div class="field field-logo row">
+                            <label for="logo-image" class="col-3 field-label">Logo:</label>
+                            <input name="logo-image" type="file" class="col-9 field-item" />
+                        </div>
+
+                        <div class="field field-name row">
+                            <label for="name" class="col-3 field-label">Name:</label>
+                            <input name="name" type="text" class="col-9 field-item" />
+                        </div>
+
+                        <div class="field field-careers row">
+                            <label for="careers" class="col-3 field-label">Careers:</label>
+                            <select name="careers" class="col-6 field-item">
+                                <option value="1">teste1</option>
+                                <option value="2">teste2</option>
+                                <option value="3">teste3</option>
+                            </select>
+                        </div>
+
+                        <div class="field field-skype row">
+                            <label for="skype" class="col-3 field-label">Skype:</label>
+                            <input name="skype" type="text" class="col-9 field-item" />
+                        </div>
+
+                        <div class="field field-phone row">
+                            <label for="phone" class="col-3 field-label">Phone:</label>
+                            <input name="phone" type="text" class="col-9 field-item" />
+                        </div>
+                    </fieldset>
+                </form>
+            </section>
+
+            <section class="preview col-6">
+                <div class="signature">
+                    <!-- here goes the template based on the form field -->
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="dist/js/all.min.js"></script>
 </body>
 </html>
