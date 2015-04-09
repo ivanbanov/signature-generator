@@ -1,24 +1,31 @@
-// Load plugins
+/*
+ * DEFAULTS
+ */
 var gulp = require('gulp'),
     $ = require('gulp-load-plugins')(),
     browserSync = require('browser-sync'),
     paths = {
         src: {
-            js: 'src/js/*.js',
+            js: 'assets/src/js/*.js',
             jsDependencies: [
-                'bower_components/jquery/dist/jquery.min.js' //jquery
+                'bower_components/jquery/dist/jquery.js',           // jquery
+                'bower_components/html2canvas/build/html2canvas.js', // html2canvas
+                'bower_components/mustache/mustache.js' // mustache
             ],
-            less: 'src/less/*.less',
-            css: 'dist/css/style.css',
+            less: 'assets/src/less/*.less',
+            css: 'assets/dist/css/style.css',
             html: 'index.html'
         },
         dist: {
-            js: 'dist/js/',
-            css: 'dist/css/'
+            js: 'assets/dist/js/',
+            css: 'assets/dist/css/'
         }
     };
 
-gulp.task('js', function() {
+/*
+ * JS
+ */
+gulp.task('script', function() {
     gulp.src(paths.src.js)
         // use plumber to don't crash watch
         .pipe($.plumber())
@@ -27,41 +34,54 @@ gulp.task('js', function() {
         .pipe($.jshint('.jshintrc'))
         .pipe($.jshint.reporter())
         .pipe($.jshint.reporter('fail'))
+        .pipe($.concat('email-signature.min.js'))
+        .pipe($.uglify())
+        .pipe(gulp.dest(paths.dist.js))
+
+        // add and concat all dependencies
+        .pipe($.addSrc(paths.src.jsDependencies))
+        .pipe($.sourcemaps.init())
+        .pipe($.concat('script.min.js'))
 
         // minify
         .pipe($.uglify())
-        .pipe($.rename('signature-generator.min.js'))
-        .pipe(gulp.dest(paths.dist.js))
 
-        // concat with all dependencies
-        .pipe($.addSrc(paths.src.jsDependencies))
-        .pipe($.concat('all.min.js'))
-        .pipe($.uglify())
+        // build
+        .pipe($.sourcemaps.write('./map'))
         .pipe(gulp.dest(paths.dist.js))
 });
 
-gulp.task('less', function() {
+/*
+ * STYLE
+ */
+gulp.task('style', function() {
     gulp.src(paths.src.less)
+        // use plumber to don't crash watch
+        .pipe($.plumber())
+        .pipe($.sourcemaps.init())
+
         // filter only the main file to compile
         // it's necessary because the watch file
         .pipe($.filter('style.less'))
 
-        // use plumber to don't crash watch
-        .pipe($.plumber())
-
         // compile less
         .pipe($.less())
-        .pipe(gulp.dest(paths.dist.css))
 
         // minify
         .pipe($.minifyCss({
             keepSpecialComments: 0
         }))
         .pipe($.rename('style.min.css'))
+
+        // build
+        .pipe($.sourcemaps.write('./map'))
         .pipe(gulp.dest(paths.dist.css));
 });
 
-gulp.task('watch', function() {
+/*
+ * SERVER
+ */
+gulp.task('server', function() {
     browserSync({
         open: false,
         server: {
@@ -70,7 +90,12 @@ gulp.task('watch', function() {
     });
 
     // browserSync.reload will reload all browsers after tasks are complete
-    gulp.watch(paths.src.less, ['less', browserSync.reload]);
-    gulp.watch(paths.src.js, ['js', browserSync.reload]);
+    gulp.watch(paths.src.less, ['style', browserSync.reload]);
+    gulp.watch(paths.src.js, ['script', browserSync.reload]);
     gulp.watch(paths.src.html, browserSync.reload);
 });
+
+/*
+ * BUILD
+ */
+gulp.task('build', ['script', 'style']);

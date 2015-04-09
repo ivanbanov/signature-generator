@@ -6,64 +6,50 @@
 	<title>E-mail Signature Generator</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="dist/css/style.min.css" />
+    <link rel="stylesheet" href="assets/dist/css/style.min.css" />
 </head>
 <body>
     <div id="base">
-        <header>
+        <header id="header">
             <select name="language" class="languages">
                 <option value="en">English</option>
                 <option value="es">Spanish</option>
                 <option value="pt">Portuguese</option>
             </select>
 
-            <h1>E-mail Signature Generator</h1>
+            <h1 class="title">Email Signature Generator</h1>
         </header>
 
-        <main class="row">
-            <section class="fields col-6">
-                <form>
-                    <fieldset>
-                        <div class="field field-logo row">
-                            <label for="logo-image" class="col-3 field-label">Logo:</label>
-                            <input name="logo-image" type="file" class="col-9 field-item" />
-                        </div>
+        <main>
+            <div class="row">
+                <section class="fields col-5">
+                    <form>
+                        <fieldset>
+                        </fieldset>
+                    </form>
+                </section>
 
-                        <div class="field field-name row">
-                            <label for="name" class="col-3 field-label">Name:</label>
-                            <input name="name" type="text" class="col-9 field-item" />
-                        </div>
+                <section class="preview col-7">
+                </section>
+            </div>
 
-                        <div class="field field-careers row">
-                            <label for="careers" class="col-3 field-label">Careers:</label>
-                            <select name="careers" class="col-6 field-item">
-                                <option value="1">teste1</option>
-                                <option value="2">teste2</option>
-                                <option value="3">teste3</option>
-                            </select>
-                        </div>
-
-                        <div class="field field-skype row">
-                            <label for="skype" class="col-3 field-label">Skype:</label>
-                            <input name="skype" type="text" class="col-9 field-item" />
-                        </div>
-
-                        <div class="field field-phone row">
-                            <label for="phone" class="col-3 field-label">Phone:</label>
-                            <input name="phone" type="text" class="col-9 field-item" />
-                        </div>
-                    </fieldset>
-                </form>
-            </section>
-
-            <section class="preview col-6">
-                <div class="signature">
-                    <!-- here goes the template based on the form field -->
-                </div>
-            </section>
+            <div class="row">
+                <section class="code col-12">
+                    <div class="code-download">
+                        <strong>download</strong>
+                        <a download="email-signature.html" class="lnk-download-html">HTML</a>
+                        <a download="email-signature.png" class="lnk-download-image">IMAGE</a>
+                    </div>
+                    <div class="code-string">
+                    </div>
+                </section>
+            </div>
         </main>
     </div>
 
-    <script src="dist/js/all.min.js"></script>
+    <script src="assets/dist/js/script.min.js"></script>
+    <script>
+        SG();
+    </script>
 </body>
 </html>
