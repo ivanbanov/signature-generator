@@ -32,8 +32,64 @@
 
             _getElements();
             _bindEvents();
-            _setDefault();
-            _updateCode();
+            _setDefaults();
+
+            _.setTemplate();
+            _.update();
+        },
+
+        setTemplate: function(templateName) {
+            templateName = templateName || 'default';
+
+            // fields
+            $.ajax({
+                url: '/templates/' + templateName + '/template.html',
+                dataType: 'html'
+            })
+            .done(function(data) {
+                _.els.preview.html(data);
+            });
+
+            // template
+            $.ajax({
+                url: '/templates/' + templateName + '/data.json',
+                dataType: 'json'
+            })
+            .done(function(data) {
+                var tmp,
+                    field,
+                    type,
+                    el,
+                    $el,
+                    html;
+
+                for (field in data.fields) {
+                    tmp = data.fields[field].el.split(':');
+                    el = tmp[0];
+                    type = tmp[1];
+                    $el = $('<' + el + ' />');
+
+                    $el.attr(data.fields[field].attr);
+
+
+                    if (type) {
+                        $el.attr('type', type);
+                    }
+
+                    html[html.length] = $el;
+                }
+
+                //_.fields.append(html);
+            });
+
+            /*
+
+            .fail(function() {
+                // fail
+            })
+            .always(function() {
+                // remove loader
+            });*/
         },
 
         liveCode: function(code) {
@@ -46,26 +102,30 @@
             }
 
             // img preview
-            html2canvas(_.els.preview.find('>:first')[0], {
+            html2canvas(signature, {
                 onrendered: function(canvas) {
                     $previewImg.html(canvas);
 
-                    // download links
+                    // download image
                     _.els.code
                     .find('.lnk-download-image')
                     .attr('href', $previewImg.find('canvas')[0].toDataURL());
                 }
             });
 
-            // code preview
+            // update code
             _.els.code
             .find('.code-string')
             .text(_code);
 
-            // download links
+            // download html
             _.els.code
             .find('.lnk-download-html')
-            .attr('href', 'data:image/html;charset=utf-8,' + encodeURIComponent(_code));
+            .attr('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(_code));
+        },
+
+        update: function() {
+            _.liveCode(_.els.preview.html());
         }
     };
 
@@ -73,34 +133,35 @@
      * PRIVATE
      */
     function _getElements() {
-       var $m;
+       var $main;
        _.els = {};
-       _.els.main = $m = $('main');
-       _.els.fields = $m.find('[data-field]');
-       _.els.preview = $m.find('.preview');
-       _.els.code = $m.find('.code');
+       _.els.main = $main = $('main');
+       _.els.fields = $main.find('.fields');
+       _.els.preview = $main.find('.preview');
+       _.els.code = $main.find('.code');
+       _refreshElFields();
+    }
+
+    function _refreshElFields() {
+        _.els.dataFields = _.els.fields.find('[data-field]');
     }
 
     function _bindEvents() {
-        $(doc).on('keyup blur change', _.els.fields.selector, function() {
+        $(doc).on('keyup blur change', _.els.dataFields.selector, function() {
             var $target = $('[data-val="' + $(this).data('field') + '"]');
             $target
             .html(this.value)
             .closest('tr')[$target.is(':empty') ? 'hide' : 'show']();
-            _updateCode();
+            _.update();
         });
     }
 
-    function _setDefault() {
+    function _setDefaults() {
         var $this;
         $('[data-default]').each(function() {
             $this = $(this);
             $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
         });
-    }
-
-    function _updateCode() {
-        _.liveCode(_.els.preview.html());
     }
 
      /*

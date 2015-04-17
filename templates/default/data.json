@@ -1,48 +1,23 @@
 {
-    fields: [
-        {
-            name: 'name',
-            tag: 'input:text',
-            attributes: {
-                placeholder: 'Name'
-            },
-            options: [
-                'option1',
-                'option2',
-                'option3'
-            ],
-            defaultValue: 'default'
+    "fields": {
+        "name": {
+            "default": "Ivan Banov",
+            "el": "input:text"
+        },
+        "company": {
+            "default": "noFreakz",
+            "el": "input:text"
+        },
+        "career": {
+            "default": "Front-End Engineer",
+            "el": "input:text"
+        },
+        "contact": {
+            "default": "ivanbanov@gmail.com",
+            "el": "input:email",
+            "attr": {
+                "placeholder": "example@site.com"
+            }
         }
-    ]
+    }
 }
-
-/*
-<div class="field field-name row">
-    <label for="name" class="col-4 field-label">Nome:</label>
-    <input name="name" type="text" class="col-8 field-item" data-field="name" data-default="Nome Sobrenome" />
-</div>
-
-<div class="field field-careers row">
-    <label for="careers" class="col-4 field-label">Área:</label>
-    <select name="careers" class="col-8 field-item" data-field="career" data-default="Área">
-        <option disabled selected>...</option>
-        <option>Diretoria</option>
-        <option>Presidência</option>
-        <option>Tecnologia da Informação</option>
-        <option>Operações</option>
-        <option>Produção</option>
-        <option>Administrativo</option>
-        <option>Facilities</option>
-        <option>Jurídico</option>
-        <option>Data Science</option>
-        <option>Transportes</option>
-        <option>Gente & Gestão</option>
-        <option>Financeiro</option>
-        <option>Relacionamento com o Cliente</option>
-        <option>Televendas</option>
-        <option>Marketing</option>
-        <option>Compras</option>
-        <option>Compras – Esportes</option>
-    </select>
-</div>
-*/
