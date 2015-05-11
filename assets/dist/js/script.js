@@ -1,5 +1,5 @@
 /*!
- * jQuery JavaScript Library v2.1.3
+ * jQuery JavaScript Library v2.1.4
  * http://jquery.com/
  *
  * Includes Sizzle.js
@@ -9,7 +9,7 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2014-12-18T15:11Z
+ * Date: 2015-04-28T16:01Z
  */
 
 (function( global, factory ) {
@@ -67,7 +67,7 @@ var
 	// Use the correct document accordingly with window argument (sandbox)
 	document = window.document,
 
-	version = "2.1.3",
+	version = "2.1.4",
 
 	// Define a local copy of jQuery
 	jQuery = function( selector, context ) {
@@ -531,7 +531,12 @@ jQuery.each("Boolean Number String Function Array Date RegExp Object Error".spli
 });
 
 function isArraylike( obj ) {
-	var length = obj.length,
+
+	// Support: iOS 8.2 (not reproducible in simulator)
+	// `in` check used to prevent JIT error (gh-2145)
+	// hasOwn isn't used here due to false negatives
+	// regarding Nodelist length in IE
+	var length = "length" in obj && obj.length,
 		type = jQuery.type( obj );
 
 	if ( type === "function" || jQuery.isWindow( obj ) ) {
@@ -9348,25 +9353,17 @@ return jQuery;
 
             _getElements();
             _bindEvents();
-            _setDefaults();
 
             _.setTemplate();
-            _.update();
         },
 
         setTemplate: function(templateName) {
+            var fieldsData = $.Deferred(),
+                templateData = $.Deferred();
+
             templateName = templateName || 'default';
 
             // fields
-            $.ajax({
-                url: '/templates/' + templateName + '/template.html',
-                dataType: 'html'
-            })
-            .done(function(data) {
-                _.els.preview.html(data);
-            });
-
-            // template
             $.ajax({
                 url: '/templates/' + templateName + '/data.json',
                 dataType: 'json'
@@ -9377,7 +9374,7 @@ return jQuery;
                     type,
                     el,
                     $el,
-                    html;
+                    html = [];
 
                 for (field in data.fields) {
                     tmp = data.fields[field].el.split(':');
@@ -9385,8 +9382,10 @@ return jQuery;
                     type = tmp[1];
                     $el = $('<' + el + ' />');
 
-                    $el.attr(data.fields[field].attr);
-
+                    $el
+                    .attr('data-field', field)
+                    .attr('data-default', data.fields[field].default)
+                    .attr(data.fields[field].attr || {})
 
                     if (type) {
                         $el.attr('type', type);
@@ -9395,17 +9394,24 @@ return jQuery;
                     html[html.length] = $el;
                 }
 
-                //_.fields.append(html);
+                fieldsData.resolve(html);
             });
 
-            /*
-
-            .fail(function() {
-                // fail
+            // template
+            $.ajax({
+                url: '/templates/' + templateName + '/template.html',
+                dataType: 'html'
             })
-            .always(function() {
-                // remove loader
-            });*/
+            .done(function(data) {
+                templateData.resolve(data);
+            });
+
+            $.when(fieldsData, templateData).done(function (fields, template) {
+                _.els.fields.find('fieldset').append(fields);
+                _refreshElFields();
+                _.els.preview.html(template);
+                _setDefaults();
+            });
         },
 
         liveCode: function(code) {
@@ -9476,13 +9482,17 @@ return jQuery;
         var $this;
         $('[data-default]').each(function() {
             $this = $(this);
+            console.log($this);
+            console.log($this.data('default'));
             $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
         });
+        _.update();
     }
 
      /*
       * GLOBAL
       */
+
     win.SG = SG;
 }(window, document));
 /*

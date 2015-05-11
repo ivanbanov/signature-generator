@@ -32,25 +32,17 @@
 
             _getElements();
             _bindEvents();
-            _setDefaults();
 
             _.setTemplate();
-            _.update();
         },
 
         setTemplate: function(templateName) {
+            var fieldsData = $.Deferred(),
+                templateData = $.Deferred();
+
             templateName = templateName || 'default';
 
             // fields
-            $.ajax({
-                url: '/templates/' + templateName + '/template.html',
-                dataType: 'html'
-            })
-            .done(function(data) {
-                _.els.preview.html(data);
-            });
-
-            // template
             $.ajax({
                 url: '/templates/' + templateName + '/data.json',
                 dataType: 'json'
@@ -61,7 +53,7 @@
                     type,
                     el,
                     $el,
-                    html;
+                    html = [];
 
                 for (field in data.fields) {
                     tmp = data.fields[field].el.split(':');
@@ -69,8 +61,10 @@
                     type = tmp[1];
                     $el = $('<' + el + ' />');
 
-                    $el.attr(data.fields[field].attr);
-
+                    $el
+                    .attr('data-field', field)
+                    .attr('data-default', data.fields[field].default)
+                    .attr(data.fields[field].attr || {})
 
                     if (type) {
                         $el.attr('type', type);
@@ -79,17 +73,24 @@
                     html[html.length] = $el;
                 }
 
-                //_.fields.append(html);
+                fieldsData.resolve(html);
             });
 
-            /*
-
-            .fail(function() {
-                // fail
+            // template
+            $.ajax({
+                url: '/templates/' + templateName + '/template.html',
+                dataType: 'html'
             })
-            .always(function() {
-                // remove loader
-            });*/
+            .done(function(data) {
+                templateData.resolve(data);
+            });
+
+            $.when(fieldsData, templateData).done(function (fields, template) {
+                _.els.fields.find('fieldset').append(fields);
+                _refreshElFields();
+                _.els.preview.html(template);
+                _setDefaults();
+            });
         },
 
         liveCode: function(code) {
@@ -160,12 +161,16 @@
         var $this;
         $('[data-default]').each(function() {
             $this = $(this);
+            console.log($this);
+            console.log($this.data('default'));
             $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
         });
+        _.update();
     }
 
      /*
       * GLOBAL
       */
+
     win.SG = SG;
 }(window, document));

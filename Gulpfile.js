@@ -6,7 +6,10 @@ var gulp = require('gulp'),
     browserSync = require('browser-sync'),
     paths = {
         src: {
-            html: 'index.html',
+            html: [
+                'index.html',
+                'templates/**/*.*'
+            ],
 
             less: 'assets/src/less/*.less',
             css: 'assets/dist/css/*.css',
