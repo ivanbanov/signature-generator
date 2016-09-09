@@ -79,7 +79,7 @@
 
             // fields
             $.ajax({
-                url: '/templates/' + templateName + '/data.json',
+                url: 'templates/' + templateName + '/data.json',
                 dataType: 'json'
             })
             .done(function(data) {
@@ -122,7 +122,7 @@
 
             // template
             $.ajax({
-                url: '/templates/' + templateName + '/template.html',
+                url: 'templates/' + templateName + '/template.html',
                 dataType: 'html'
             })
             .done(function(data) {
