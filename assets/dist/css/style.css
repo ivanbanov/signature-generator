@@ -473,8 +473,8 @@ a {
   float: right;
   margin-bottom: 30px;
 }
-.preview table {
-  margin: 0 auto;
+.preview > * {
+  float: right;
 }
 .preview-img {
   display: none;
