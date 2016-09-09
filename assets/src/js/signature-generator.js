@@ -41,11 +41,9 @@
     }
 
     function _bindEvents() {
-        $(doc).on('keyup blur change', _.els.dataFields.selector, function() {
+        $(doc).on('input', _.els.dataFields.selector, function() {
             var $target = $('[data-val="' + $(this).data('field') + '"]');
-            $target
-            .html(this.value)
-            .closest('tr')[$target.is(':empty') ? 'hide' : 'show']();
+            $target.html(this.value);
             _.update();
         });
     }
@@ -54,8 +52,6 @@
         var $this;
         $('[data-default]').each(function() {
             $this = $(this);
-            console.log($this);
-            console.log($this.data('default'));
             $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
         });
         _.update();
@@ -78,7 +74,8 @@
             var fieldsData = $.Deferred(),
                 templateData = $.Deferred();
 
-            templateName = templateName || 'default';
+            // templateName = templateName || 'default';
+            templateName = templateName || 'bankfacil';
 
             // fields
             $.ajax({

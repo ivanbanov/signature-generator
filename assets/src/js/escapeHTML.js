@@ -71,11 +71,12 @@
             case 253: return '&yacute;';
             case 255: return '&yuml;';
             case 162: return '&cent;';
+            case 176: return '&deg';
             default: found=false;
         }
 
         if(!found && char > 127) {
-            var arr = new Array(4),
+            var arr = [null,null,null,null],
                 a;
 
             for (a in arr) {

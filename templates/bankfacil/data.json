@@ -1,0 +1,19 @@
+{
+    "fields": {
+        "name": {
+            "label": "Nome",
+            "default": "Sergio Furió",
+            "el": "input:text"
+        },
+        "career": {
+            "label": "Cargo",
+            "default": "Chief Executive Officer",
+            "el": "input:text"
+        },
+        "ramal": {
+            "label": "Ramal",
+            "default": "123",
+            "el": "input:number"
+        }
+    }
+}
