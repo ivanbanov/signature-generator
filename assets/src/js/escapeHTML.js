@@ -1,21 +1,6 @@
 ;(function(win) {
     'use strict';
 
-    function escapeHTML(text) {
-        var preescape = '' + text,
-            escaped = '',
-            i = 0,
-            p;
-
-        for(; i < preescape.length; i++) {
-            p = preescape.charAt(i);
-            p = '' + escapeCharx(p);
-            escaped = escaped + p;
-        }
-
-        return escaped;
-    }
-
     function escapeCharx(text) {
         var hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'],
             found = true,
@@ -103,6 +88,22 @@
             return text;
         }
     }
+
+    function escapeHTML(text) {
+        var preescape = '' + text,
+            escaped = '',
+            i = 0,
+            p;
+
+        for(; i < preescape.length; i++) {
+            p = preescape.charAt(i);
+            p = '' + escapeCharx(p);
+            escaped = escaped + p;
+        }
+
+        return escaped;
+    }
+
     /*
      * GLOBAL
      */

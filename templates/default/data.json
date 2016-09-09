@@ -1,18 +1,22 @@
 {
     "fields": {
         "name": {
+            "label": "Nome",
             "default": "Ivan Banov",
             "el": "input:text"
         },
         "company": {
+            "label": "Empresa",
             "default": "noFreakz",
             "el": "input:text"
         },
         "career": {
+            "label": "Cargo",
             "default": "Front-End Engineer",
             "el": "input:text"
         },
         "contact": {
+            "label": "Contato",
             "default": "ivanbanov@gmail.com",
             "el": "input:email",
             "attr": {

@@ -451,16 +451,19 @@ a {
   margin-top: 5px;
 }
 .field small {
-  color: #555555;
+  color: #555;
   float: right;
   margin-top: 2px;
 }
 .field-label {
   font-weight: bold;
   margin-top: 5px;
+  margin-right: 10px;
+  width: 75px;
+  display: inline-block;
 }
 .field-item {
-  background: #ffffff;
+  background: #fff;
   height: 30px;
   padding: 5px;
   border: 1px solid #d4d4d4;

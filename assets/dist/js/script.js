@@ -9212,21 +9212,6 @@ return jQuery;
 ;(function(win) {
     'use strict';
 
-    function escapeHTML(text) {
-        var preescape = '' + text,
-            escaped = '',
-            i = 0,
-            p;
-
-        for(; i < preescape.length; i++) {
-            p = preescape.charAt(i);
-            p = '' + escapeCharx(p);
-            escaped = escaped + p;
-        }
-
-        return escaped;
-    }
-
     function escapeCharx(text) {
         var hex = ['0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f'],
             found = true,
@@ -9314,6 +9299,22 @@ return jQuery;
             return text;
         }
     }
+
+    function escapeHTML(text) {
+        var preescape = '' + text,
+            escaped = '',
+            i = 0,
+            p;
+
+        for(; i < preescape.length; i++) {
+            p = preescape.charAt(i);
+            p = '' + escapeCharx(p);
+            escaped = escaped + p;
+        }
+
+        return escaped;
+    }
+
     /*
      * GLOBAL
      */
@@ -9342,6 +9343,44 @@ return jQuery;
 
         // return the instance
         return SG._instance;
+    }
+
+    /*
+     * PRIVATE
+     */
+    function _refreshElFields() {
+        _.els.dataFields = _.els.fields.find('[data-field]');
+    }
+
+    function _getElements() {
+       var $main;
+       _.els = {};
+       _.els.main = $main = $('main');
+       _.els.fields = $main.find('.fields');
+       _.els.preview = $main.find('.preview');
+       _.els.code = $main.find('.code');
+       _refreshElFields();
+    }
+
+    function _bindEvents() {
+        $(doc).on('keyup blur change', _.els.dataFields.selector, function() {
+            var $target = $('[data-val="' + $(this).data('field') + '"]');
+            $target
+            .html(this.value)
+            .closest('tr')[$target.is(':empty') ? 'hide' : 'show']();
+            _.update();
+        });
+    }
+
+    function _setDefaults() {
+        var $this;
+        $('[data-default]').each(function() {
+            $this = $(this);
+            console.log($this);
+            console.log($this.data('default'));
+            $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
+        });
+        _.update();
     }
 
     /*
@@ -9374,24 +9413,33 @@ return jQuery;
                     type,
                     el,
                     $el,
+                    $label,
+                    $field,
                     html = [];
 
                 for (field in data.fields) {
                     tmp = data.fields[field].el.split(':');
                     el = tmp[0];
                     type = tmp[1];
-                    $el = $('<' + el + ' />');
+                    $el = $('<' + el + ' class="field-item" />');
+                    $label = $('<label class="field-label">' + data.fields[field].label + '</label>');
 
                     $el
                     .attr('data-field', field)
                     .attr('data-default', data.fields[field].default)
-                    .attr(data.fields[field].attr || {})
+                    .attr(data.fields[field].attr || {});
 
                     if (type) {
                         $el.attr('type', type);
                     }
 
-                    html[html.length] = $el;
+                    $field = $('<div class="field" />');
+
+                    $field
+                    .append($label)
+                    .append($el);
+
+                    html[html.length] = $field;
                 }
 
                 fieldsData.resolve(html);
@@ -9450,44 +9498,6 @@ return jQuery;
             _.liveCode(_.els.preview.html());
         }
     };
-
-    /*
-     * PRIVATE
-     */
-    function _getElements() {
-       var $main;
-       _.els = {};
-       _.els.main = $main = $('main');
-       _.els.fields = $main.find('.fields');
-       _.els.preview = $main.find('.preview');
-       _.els.code = $main.find('.code');
-       _refreshElFields();
-    }
-
-    function _refreshElFields() {
-        _.els.dataFields = _.els.fields.find('[data-field]');
-    }
-
-    function _bindEvents() {
-        $(doc).on('keyup blur change', _.els.dataFields.selector, function() {
-            var $target = $('[data-val="' + $(this).data('field') + '"]');
-            $target
-            .html(this.value)
-            .closest('tr')[$target.is(':empty') ? 'hide' : 'show']();
-            _.update();
-        });
-    }
-
-    function _setDefaults() {
-        var $this;
-        $('[data-default]').each(function() {
-            $this = $(this);
-            console.log($this);
-            console.log($this.data('default'));
-            $('[data-val="' + $this.data('field') + '"]').html($this.data('default'));
-        });
-        _.update();
-    }
 
      /*
       * GLOBAL
